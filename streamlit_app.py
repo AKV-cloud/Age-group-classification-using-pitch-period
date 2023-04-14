@@ -1,38 +1,80 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
 import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.io import wavfile
 
-"""
-# Welcome to Streamlit!
+# Define a function to compute autocorrelation
+def autocorr(y):
+    autocor = np.zeros(len(y))
+    for l in range(len(y)):
+        sum1 = 0
+        for u in range(len(y)-l):
+            s = y[u] * y[u+l]
+            sum1 = sum1 + s
+        autocor[l] = np.sum(sum1)
+    return autocor
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:
+# Define a function to find the pitch period and pitch frequency
+def pitch_period_freq(autocor, Fs):
+    auto = autocor[20:]
+    max1 = 0
+    sample_no = 0
+    for uu in range(len(auto)):
+        if auto[uu] > max1:
+            max1 = auto[uu]
+            sample_no = uu
+    pitch_period_To = (20 + sample_no) * (1/Fs)
+    pitch_freq_Fo = 1 / pitch_period_To
+    return pitch_period_To, pitch_freq_Fo
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+# Define a function to get age group based on pitch period
+def age_group(pitch_period_ms):
+    if 30 <= pitch_period_ms <= 80:
+        return "Infant"
+    elif 80 < pitch_period_ms <= 260:
+        return "Child"
+    elif 260 < pitch_period_ms <= 380:
+        return "Teenager"
+    elif 380 < pitch_period_ms <= 550:
+        return "Adult"
+    else:
+        return "Elderly"
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+# Define a list of input file names
+input_files = ['infant8K.wav', 'oldman8K1sec.wav', 'adult2_1sec.wav']
 
+# Create the Streamlit app
+st.title("Audio Analysis App")
+selected_file = st.selectbox("Select an input file", input_files)
+Fs, y = wavfile.read(selected_file)
+bits = 16  # assuming the audio file is 16-bit
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+# Normalize the signal
+max_value = np.max(np.abs(y))
+y = y / max_value
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+# Create a time vector
+t = np.arange(len(y)) * (1/Fs) * 1000
 
-    points_per_turn = total_points / num_turns
+# Calculate the autocorrelation of the signal
+autocor = autocorr(y)
 
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
+# Find the pitch period and pitch frequency
+pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
+age = age_group(pitch_period_To * 1000)
 
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+# Create the plots
+fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
+axs[0].plot(t, y)
+axs[0].set_title('Speech Signal')
+axs[0].set_xlabel('time in milliseconds')
+
+kk = np.arange(len(autocor)) * (1/Fs) * 1000
+axs[1].plot(kk, autocor)
+axs[1].set_title('Autocorrelation of Speech Signal')
+axs[1].set_xlabel('time in milliseconds')
+
+# Display the pitch period and age group
+st.write(f"Pitch period: {pitch_period_To*1000} ms")
+st.write(f"Pitch frequency: {pitch_freq_Fo} Hz")
+st.write(f"Age group: {age}")
