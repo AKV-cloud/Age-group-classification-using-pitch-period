@@ -64,13 +64,12 @@ y = y / max_value
 t = np.arange(len(y)) * (1/Fs) * 1000
 
 with st.spinner('Processing audio file...'):
-
+with st.spinner("Computing..."):
 # Calculate the autocorrelation of the signal
-autocor = autocorr(y)
-
+    autocor = autocorr(y)
 # Find the pitch period and pitch frequency
-pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
-age = age_group(pitch_period_To * 1000)
+    pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
+    age = age_group(pitch_period_To * 1000)
 
 # Create the plots
 fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
