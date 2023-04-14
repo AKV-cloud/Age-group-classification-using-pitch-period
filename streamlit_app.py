@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
 
-st.markdown("<h1 style='text-align: center; color: white;'>DFT Filtering of an ECG Signal :  DFT based Filtering for removing high frequency components having frequency above 30 Hz . Assume ECG signal with a sampling rate of 360 Hz</h1>",
+st.markdown("<h1 style='text-align: center; color: white;'>Age Group Classification Using Pitch Period Computed Using Autocorrelation Function</h1>",
             unsafe_allow_html=True)
 st.sidebar.markdown("Submitted By : ")
 st.sidebar.markdown(" **_Arun Kumar V_** ")
