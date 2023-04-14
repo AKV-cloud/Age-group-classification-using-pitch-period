@@ -52,45 +52,30 @@ def age_group(pitch_period_ms):
 # Define a list of input file names
 input_files = ['infant1sec.wav', 'oldman8K1sec.wav', 'adult1.wav']
 
-selected_file = st.selectbox("Select an input file", input_files)
+selected_file = st.radio("Select an input file", input_files)
+Fs, y = wavfile.read(selected_file)
+bits = 16  # assuming the audio file is 16-bit
 
-if selected_file:
-    Fs, y = wavfile.read(selected_file)
-    bits = 16  # assuming the audio file is 16-bit
+# Normalize the signal
+max_value = np.max(np.abs(y))
+y = y / max_value
 
-    # Normalize the signal
-    max_value = np.max(np.abs(y))
-    y = y / max_value
+# Create a time vector
+t = np.arange(len(y)) * (1/Fs) * 1000
 
-    # Create a time vector
-    t = np.arange(len(y)) * (1/Fs) * 1000
+with st.spinner(f"Computing {selected_file}..."):
+    # Calculate the autocorrelation of the signal
+     autocor = autocorr(y)
 
-    with st.spinner(f"Computing {selected_file}..."):
-        # Calculate the autocorrelation of the signal
-        autocor = autocorr(y)
+# Find the pitch period and pitch frequency
+pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
+age = age_group(pitch_period_To * 1000)
 
-    # Find the pitch period and pitch frequency
-    pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
-    age = age_group(pitch_period_To * 1000)
+# Create the plots
+fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
+axs[0].plot(t, y)
+axs[0].set_title('Speech Signal')
+axs[0].set_xlabel('time in milliseconds')
+st.pyplot(t,y)
 
-    # Create the plots
-    fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
-    axs[0].plot(t, y)
-    axs[0].set_title('Speech Signal')
-    axs[0].set_xlabel('time in milliseconds')
-    st.pyplot(t,y)
-
-    kk = np.arange(len(autocor)) * (1/Fs) * 1000
-    axs[1].plot(kk, autocor)
-    axs[1].set_title('Autocorrelation of Speech Signal')
-    axs[1].set_xlabel('time in milliseconds')
-    st.pyplot(kk,autocor)
-
-    # Display the pitch period and age group
-    st.write(f"Audio file selected is: {selected_file}")
-    st.write(f"Pitch period: {pitch_period_To*1000} ms")
-    st.write(f"Pitch frequency: {pitch_freq_Fo} Hz")
-    st.write(f"Age group: {age}")
-
-
-
+kk = np.arange(len
