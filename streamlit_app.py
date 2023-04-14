@@ -41,7 +41,7 @@ def age_group(pitch_period_ms):
         return "Elderly"
 
 # Define a list of input file names
-input_files = ['infant8K.wav', 'oldman8K1sec.wav', 'adult2_1sec.wav']
+input_files = ['infant1sec.wav', 'oldman8K1sec.wav', 'adult2_1sec.wav']
 
 # Create the Streamlit app
 st.title("Audio Analysis App")
