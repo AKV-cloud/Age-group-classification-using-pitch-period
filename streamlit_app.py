@@ -3,6 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
 
+st.markdown("<h1 style='text-align: center; color: white;'>DFT Filtering of an ECG Signal :  DFT based Filtering for removing high frequency components having frequency above 30 Hz . Assume ECG signal with a sampling rate of 360 Hz</h1>",
+            unsafe_allow_html=True)
+st.sidebar.markdown("Submitted By : ")
+st.sidebar.markdown(" **_Arun Kumar V_** ")
+st.sidebar.markdown(" **_122001049_**")
+st.sidebar.markdown("Under the Supervision of : ")
+st.sidebar.markdown(" **Dr. M. Sabarimalai Manikandan** ")
+st.sidebar.markdown(" **IIT Palakkad**")
+
 # Define a function to compute autocorrelation
 def autocorr(y):
     autocor = np.zeros(len(y))
