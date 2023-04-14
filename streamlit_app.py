@@ -63,7 +63,7 @@ y = y / max_value
 # Create a time vector
 t = np.arange(len(y)) * (1/Fs) * 1000
 
-with st.spinner("Processing audio file...{selected_file}"):
+with st.spinner(f"Processing audio file...{selected_file}"):
 # Calculate the autocorrelation of the signal
     autocor = autocorr(y)
 # Find the pitch period and pitch frequency
