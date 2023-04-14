@@ -16,6 +16,7 @@ st.sidebar.markdown(" **IIT Palakkad**")
 def autocorr(y):
     autocor = np.zeros(len(y))
     for l in range(len(y)):
+        st.write(f"l is {l}") 
         sum1 = 0
         for u in range(len(y)-l):
             s = y[u] * y[u+l]
