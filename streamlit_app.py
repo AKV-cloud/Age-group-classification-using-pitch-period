@@ -79,6 +79,7 @@ axs1.set_title('Speech Signal')
 axs1.set_xlabel('time in milliseconds')
 st.pyplot(fig1)
 
+kk = np.arange(len(autocor)) * (1/Fs) * 1000
 # Create a separate figure for ACF plot
 fig2, axs2 = plt.subplots(figsize=(8, 4))
 axs2.plot(kk, autocor)
