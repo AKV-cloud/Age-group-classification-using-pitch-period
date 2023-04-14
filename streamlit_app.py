@@ -50,7 +50,7 @@ def age_group(pitch_freq):
         return "Unknown"
 
 # Define a list of input file names
-input_files = ['adult1.wav', 'oldman8K1sec.wav', 'infant1sec.wav']
+input_files = ['adult.wav', 'infant.wav', 'teenager.wav','elderly.wav']
 
 selected_file = st.radio("Select an input file", input_files)
 Fs, y = wavfile.read(selected_file)
