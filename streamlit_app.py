@@ -52,8 +52,6 @@ def age_group(pitch_period_ms):
 # Define a list of input file names
 input_files = ['infant1sec.wav', 'oldman8K1sec.wav', 'adult2_1sec.wav']
 
-# Create the Streamlit app
-st.title("Audio Analysis App")
 selected_file = st.selectbox("Select an input file", input_files)
 Fs, y = wavfile.read(selected_file)
 bits = 16  # assuming the audio file is 16-bit
