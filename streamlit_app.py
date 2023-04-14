@@ -72,16 +72,19 @@ pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
 age = age_group(pitch_freq_Fo)
 
     # Create the plots
-fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
-axs[0].plot(t, y)
-axs[0].set_title('Speech Signal')
-axs[0].set_xlabel('time in milliseconds')
+# Create a separate figure for speech signal plot
+fig1, axs1 = plt.subplots(figsize=(8, 4))
+axs1.plot(t, y)
+axs1.set_title('Speech Signal')
+axs1.set_xlabel('time in milliseconds')
+st.pyplot(fig1)
 
-
-kk = np.arange(len(autocor)) * (1/Fs) * 1000
-axs[1].plot(kk, autocor)
-axs[1].set_title('Autocorrelation of Speech Signal')
-axs[1].set_xlabel('time in milliseconds')
+# Create a separate figure for ACF plot
+fig2, axs2 = plt.subplots(figsize=(8, 4))
+axs2.plot(kk, autocor)
+axs2.set_title('Autocorrelation of Speech Signal')
+axs2.set_xlabel('time in milliseconds')
+st.pyplot(fig2)
 
 
     # Display the pitch period and age group
