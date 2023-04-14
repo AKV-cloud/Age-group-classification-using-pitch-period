@@ -50,7 +50,7 @@ def age_group(pitch_period_ms):
         return "Elderly"
 
 # Define a list of input file names
-input_files = ['infant1sec.wav', 'oldman8K1sec.wav', 'adult2_1sec.wav']
+input_files = ['infant1sec.wav', 'oldman8K1sec.wav', 'adult1.wav']
 
 selected_file = st.selectbox("Select an input file", input_files)
 Fs, y = wavfile.read(selected_file)
@@ -75,13 +75,18 @@ fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
 axs[0].plot(t, y)
 axs[0].set_title('Speech Signal')
 axs[0].set_xlabel('time in milliseconds')
+st.pyplot(t,y)
 
 kk = np.arange(len(autocor)) * (1/Fs) * 1000
 axs[1].plot(kk, autocor)
 axs[1].set_title('Autocorrelation of Speech Signal')
 axs[1].set_xlabel('time in milliseconds')
+st.pyplot(kk,autocor)
 
 # Display the pitch period and age group
+st.write(f"Audio file selected is: {filename}")
 st.write(f"Pitch period: {pitch_period_To*1000} ms")
 st.write(f"Pitch frequency: {pitch_freq_Fo} Hz")
 st.write(f"Age group: {age}")
+
+
