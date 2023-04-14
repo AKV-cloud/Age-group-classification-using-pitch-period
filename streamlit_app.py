@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
+import time
 
 st.markdown("<h1 style='text-align: center; color: white;'>Age Group Classification Using Pitch Period Computed Using Autocorrelation Function</h1>",
             unsafe_allow_html=True)
@@ -22,6 +23,17 @@ def autocorr(y):
             sum1 = sum1 + s
         autocor[l] = np.sum(sum1)
     return autocor
+
+progress_bar = st.progress(0)
+status_text = st.empty()
+
+for i in range(len(y)):
+    status_text.text(f'Progress: {(i + 1)/len(y)}%')
+    progress_bar.progress((i + 1)/len(y))
+    time.sleep(0.1)
+
+status_text.text('Done!')
+
 
 # Define a function to find the pitch period and pitch frequency
 def pitch_period_freq(autocor, Fs):
