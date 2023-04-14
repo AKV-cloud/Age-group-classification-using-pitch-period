@@ -40,11 +40,11 @@ def pitch_period_freq(autocor, Fs):
 def age_group(pitch_freq):
     if  pitch_freq <= 110:
         return "Elderly"
-    elif 110 < pitch_period_ms <= 190:
+    elif 110 < pitch_freq <= 190:
         return "Adult"
-    elif 190 < pitch_period_ms <= 280:
+    elif 190 < pitch_freq <= 280:
         return "Teenager"
-    elif 280 < pitch_period_ms <= 450:
+    elif 280 < pitch_freq <= 450:
         return "Infant"
     else:
         return "Unknown"
