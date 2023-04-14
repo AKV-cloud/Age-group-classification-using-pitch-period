@@ -15,8 +15,7 @@ st.sidebar.markdown(" **IIT Palakkad**")
 # Define a function to compute autocorrelation
 def autocorr(y):
     autocor = np.zeros(len(y))
-    for l in range(len(y)):
-        st.write(f"l is {l}") 
+    for l in range(len(y)): 
         sum1 = 0
         for u in range(len(y)-l):
             s = y[u] * y[u+l]
@@ -38,17 +37,17 @@ def pitch_period_freq(autocor, Fs):
     return pitch_period_To, pitch_freq_Fo
 
 # Define a function to get age group based on pitch period
-def age_group(pitch_period_ms):
-    if 30 <= pitch_period_ms <= 80:
-        return "Infant"
-    elif 80 < pitch_period_ms <= 260:
-        return "Child"
-    elif 260 < pitch_period_ms <= 380:
-        return "Teenager"
-    elif 380 < pitch_period_ms <= 550:
-        return "Adult"
-    else:
+def age_group(pitch_freq):
+    if  pitch_freq <= 110:
         return "Elderly"
+    elif 110 < pitch_period_ms <= 190:
+        return "Adult"
+    elif 190 < pitch_period_ms <= 280:
+        return "Teenager"
+    elif 280 < pitch_period_ms <= 450:
+        return "Infant"
+    else:
+        return "Unknown"
 
 # Define a list of input file names
 input_files = ['adult1.wav', 'oldman8K1sec.wav', 'infant1sec.wav']
@@ -70,7 +69,7 @@ with st.spinner(f"Computing {selected_file}..."):
 
 # Find the pitch period and pitch frequency
 pitch_period_To, pitch_freq_Fo = pitch_period_freq(autocor, Fs)
-age = age_group(pitch_period_To * 1000)
+age = age_group(pitch_freq_Fo)
 
     # Create the plots
 fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(8, 8))
